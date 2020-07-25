@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>gugu</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div>{{ first }} multiply {{ second }} is?</div>
+      <form v-on:submit="onSubmitForm">
+        <input type="number" ref="answer" v-model="value">
+        <button>Input</button>
+      </form>
+      <div>
+        <p v-if="correct===true">Correct!</p>
+        <p v-else-if="correct===false">Wrong!</p>
+      </div>
+    </div>
+
+    <script>
+      const app = new Vue({
+              el: '#root',
+              data: {
+                      first: Math.ceil(Math.random() * 9),
+                      second: Math.ceil(Math.random() *9),
+                      value: '',
+                      correct: ''
+                    },
+              methods: {
+                      onSubmitForm(e) {
+                              e.preventDefault();
+                              this.$refs.answer.focus(); // focus on input 
+                              if(this.first * this.second == (1*this.value)) {
+                                this.correct = true;
+                                this.first = Math.ceil(Math.random() * 15);
+                                this.second = Math.ceil(Math.random() * 15);
+                              }
+                              else {
+                                this.correct = false;
+                              }
+                              this.value = '';
+                            }
+                    }
+            })
+    </script>
+  </body>
+</html>
