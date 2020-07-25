@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <siritori start-word="Apple"></siritori>
+      <br>
+      <siritori start-word="Rabbit"></siritori>
+    </div>
+
+    <script>
+      Vue.component('siritori', {
+        template: `
+          <div>
+            <div>{{ word }}</div>
+            <form v-on:submit="onSubmitForm">
+              <input type="text" ref="answer" v-model="value">
+              <button type="submit">Check!</button>
+            </form>
+            <div> {{ result }} </div>
+         </div>
+          `,
+        props: ['startWord'],
+        data() {
+          return {
+            word: this.startWord,
+            result: '',
+            value: ''
+          }
+        },
+        methods: {
+        onSubmitForm(e) {
+            e.preventDefault();
+            this.$refs.answer.focus();
+            if(this.word[this.word.length-1] === this.value[0]) {
+                    this.result = "Good!"
+                    this.word = this.value
+            } else {
+                    this.result = "Wrong!"
+            }
+            this.value = ''
+          }
+        }
+      });
+    </script>
+    <script>
+      const app = new Vue({
+              el: '#root',
+      });
+    </script>
+
+  </body>
+</html>
