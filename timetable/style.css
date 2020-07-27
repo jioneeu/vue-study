@@ -3,10 +3,11 @@ body {
   font-family: monospace;
   font-size: 15px;
 }
-main {
+main, footer {
   width: 250px;
   border: 1px solid black;
   color: #fff;
+  margin: 10px 0;
 }
 div {
   xtext-align: center;
@@ -48,4 +49,17 @@ button {
 input {
   background-color: black;
   color: #ccc;
+}
+
+footer {
+  font-size: 13px;
+}
+
+textarea {
+  background-color: black;
+  color: #ccc;
+}
+
+span.notes {
+  overflow-wrap: anywhere;
 }

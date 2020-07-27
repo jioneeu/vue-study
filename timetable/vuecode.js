@@ -3,14 +3,15 @@ const app = new Vue({
   data: {
     studying: false,
     breaktime: false,
-    hour: '00',
-    min: '00',
-    sec: '00',
+    hour: '03',
+    min: '8',
+    sec: '30',
     timecontext: '00h 00m 00s',
     timer: null,
     breakMessage: '',
     subject: '',
     studyingHours: '',
+    notes: '',
   },
   methods: {
     takeBreak() {
