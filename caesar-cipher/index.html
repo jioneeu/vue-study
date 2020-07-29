@@ -10,21 +10,31 @@
   </head>
   <body>
     <div id="root">
-      <div id="shift-wrapper" @keyup.enter="caesarCipher">
-        Shift:
-        <input type="text" v-model="shift"> <br>
-        <span>A -&gt {{ String.fromCharCode(convertToAscii('A')) }}</span>
+      <div class="nes-container with-title is-centered">
+        <p class="title">Caesar Cipher</p>
+
+        <div id="shift-wrapper">
+          <span>Shift: </span>
+          <input type="text" @keyup.enter="caesarCipher" v-model="shift"> 
+          <span>A -&gt {{ String.fromCharCode(convertToAscii('A')) }}</span>
+        </div>
+
+        <br>
+
+        <div id="text-wrapper">
+          <span>Text: </span> <br>
+          <input type="text" v-model="word" @keyup="caesarCipher">
+        </div>
+
+        <br>
+
+        <div id="cipher-wrapper">
+          <span>Ciphered: </span> <br>
+          <input type="text" v-model="ciphered" disabled >
+        </div>
       </div>
 
-      <div id="shifted-word-wrapper">
-        Text: 
-        <input type="text" v-model="word" @keyup="caesarCipher">
-      </div>
 
-      <div id="result-wrapper">
-        Caesar Ciphered: 
-        {{ ciphered }}
-      </div>
     </div>
   </body>
   <script src="main.js"></script>
