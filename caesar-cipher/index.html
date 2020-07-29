@@ -14,6 +14,7 @@
         <p class="title">Caesar Cipher</p>
 
         <div id="shift-wrapper">
+          <span class="nes-text is-warning">* Press enter...</span> <br>
           <span>Shift: </span>
           <input type="text" @keyup.enter="caesarCipher" v-model="shift"> 
           <span>A -&gt {{ String.fromCharCode(convertToAscii('A')) }}</span>
@@ -23,14 +24,19 @@
 
         <div id="text-wrapper">
           <span>Text: </span> <br>
-          <input type="text" v-model="word" @keyup="caesarCipher">
+          <input type="text" v-model="word" @keyup="caesarCipher" @keyup.enter="addHistory">
         </div>
 
         <br>
 
         <div id="cipher-wrapper">
           <span>Ciphered: </span> <br>
-          <input type="text" v-model="ciphered" disabled >
+          <span class="nes-text is-disabled">{{ ciphered }}</span>
+          <br>
+          
+          <ul>
+            <li class="nes-text is-disabled" v-for="hist in history"> {{ hist.text }}</li>
+          </ul>
         </div>
       </div>
 
