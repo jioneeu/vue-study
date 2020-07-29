@@ -5,3 +5,19 @@ html, body, pre, code, kbd, samp {
 body {
   margin: 20px;
 }
+
+input {
+  text-align: center;
+}
+
+#shift-wrapper input {
+  width: 100px;
+}
+
+#text-wrapper input, #cipher-wrapper input {
+  width: 100%;
+}
+
+#cipher-wrapper input {
+  border: none;
+}

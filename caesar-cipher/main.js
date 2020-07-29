@@ -26,6 +26,12 @@ const app = new Vue({
         } else {
           charCode += shift;
         }
+      } else if (charCode >= 97 && charCode <= 122) {
+        if (charCode + shift > 122) {
+          charCode = 96 + (charCode + shift) % 122;
+        } else {
+          charCode += shift;
+        }
       }
 
       return charCode;
