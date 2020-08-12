@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gugudan</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        #correct {
+            color: blue;
+        }
+        #wrong {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div>{{ x }}かける{{ y }}は？</div>
+        <form @submit="onSubmitForm">
+            <input ref="answer" type="number" v-model="answer">
+            <button type="submit">入力</button>
+        </form>
+        <div v-if="result == true" id="correct">正解！</div>
+        <div v-else-if="result == false" id="wrong">ブウウー！間違えたよ。</div>
+    </div>
+</body>
+<script>
+    const root = new Vue({
+        el: '#root',
+        data: {
+            x: Math.ceil(Math.random() * 9),
+            y: Math.ceil(Math.random() * 9),
+            answer: '',
+            result: null,
+        },
+        methods: {
+            onSubmitForm(e) {
+                e.preventDefault();
+                if (this.x * this.y == this.answer) {
+                    this.result = true;
+                    this.x = Math.ceil(Math.random() * 9);
+                    this.y = Math.ceil(Math.random() * 9);
+                } else {
+                    this.result = false;
+                }
+                this.$refs.answer.focus();
+                this.answer = '';
+            }
+        }
+    })
+</script>
+</html>
