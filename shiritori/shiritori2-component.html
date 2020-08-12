@@ -17,23 +17,33 @@
 
 <body>
     <div id="root">
-        <div>{{ word }}</div>
-        <form @submit="onSubmitForm">
-            <input ref="answer" type="text" v-model="value">
-            <button type="submit">入力！</button>
-        </form>
-        <div v-if="result == true" id="correct">正解！"</div>
-        <div v-else-if="result == false" id="wrong">(ㆀ˘･з･˘)ブーWrong！</div>
+        <word-relay start-word="Jione"></word-relay>
+        <hr>
+        <word-relay start-word="Jiwon"></word-relay>
     </div>
 </body>
 
 <script>
-    const app = new Vue({
-        el: '#root',
-        data: {
-            word: 'Jione',
-            result: null,
-            value: '',
+    Vue.component('wordRelay', {
+        template: `
+            <div>
+                <div>{{ word }}</div>
+                <form @submit="onSubmitForm">
+                    <input ref="answer" type="text" v-model="value">
+                    <button type="submit">入力！</button>
+                </form>
+                <div v-if="result == true" id="correct">正解！"</div>
+                <div v-else-if="result == false" id="wrong">(ㆀ˘･з･˘)ブーWrong！</div>
+                </div>
+            </div>
+        `,
+        props: ['startWord'],
+        data() {
+            return {
+                word: this.startWord,
+                result: null,
+                value: '',
+            }
         },
         methods: {
             onSubmitForm(e) {
@@ -47,8 +57,12 @@
                 }
                 this.$refs.answer.focus();
                 this.value = '';
-            }
+            },
         }
+    })
+
+    const app = new Vue({
+        el: '#root',
     })
 </script>
 </html>
