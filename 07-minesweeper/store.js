@@ -12,13 +12,14 @@ export const NORMALIZE_CELL = 'NORMALIZE_CELL';
 export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 export const CODE = {
-    MINE: -7,
+    MINE: -8,
     NORMAL: -1, 
     QUESTION: -2,
     FLAG: -3,
     QUESTION_MINE: -4,
     FLAG_MINE: -5,
     CLICKED_MINE: -6,
+    REST_MINE: -7,
     OPENED: 0,
 };
 
@@ -42,18 +43,21 @@ const plantMine = (row, col, mine) => {
         }
     }
 
+    let mines = [];
     for(let k=0; k<shuffle.length; ++k) {
         const ver = Math.floor(shuffle[k] / col);
         const hor = shuffle[k] % col; 
         data[ver][hor] = CODE.MINE;
+        mines.push([ver,hor]);
     }
 
-    return data;
+    return [data, mines];
 };
 
 export default new Vuex.Store({
      state: {
         tableData: [],
+        mineData: [],
         data: {
             row: 0,
             col: 0,
@@ -74,7 +78,7 @@ export default new Vuex.Store({
                 col, 
                 mine,
             };
-            state.tableData = plantMine(row, col, mine);
+            [state.tableData, state.mineData] = plantMine(row, col, mine);
             state.timer = 0;
             state.halted = false;
             state.openedCount =  0;
@@ -176,6 +180,9 @@ export default new Vuex.Store({
         },
         [CLICK_MINE](state, { row, col }) {
             state.halted = true;
+            state.mineData.forEach((coord) => {
+                Vue.set(state.tableData[coord[0]], coord[1], CODE.REST_MINE);
+            })
             Vue.set(state.tableData[row], col, CODE.CLICKED_MINE);
         },
         [FLAG_CELL](state, { row, col }){

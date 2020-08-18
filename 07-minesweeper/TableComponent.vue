@@ -32,6 +32,17 @@ export default {
                             background: '#444',
                         };
                     case CODE.CLICKED_MINE:
+                        return {
+                            background: '#f00',
+                            fontWeight: 'bold',
+                            fontSize: '1.5em',
+                        }
+                    case CODE.REST_MINE:
+                        return {
+                            background: '#ffbbbb',
+                            fontWeight: 'bold',
+                            fontSize: '1.5em',  
+                        }
                     case CODE.OPENED:
                         return {
                             background: 'white',
@@ -39,12 +50,17 @@ export default {
                     case CODE.FLAG:
                     case CODE.FLAG_MINE:
                         return {
-                            background: 'red',
+                            color: 'red',
+                            background: 'yellow',
+                            fontSize: '2em',
+                            fontWeight: 'bold',
                         };
                     case CODE.QUESTION:
                     case CODE.QUESTION_MINE: 
                         return {
                             background: 'yellow',
+                            fontSize: '2em',
+                            fontWeight: 'bold',
                         };
                     default: 
                         return {};
@@ -55,7 +71,7 @@ export default {
             return (row, col) => {
                 switch(this.$store.state.tableData[row][col]) {
                     case CODE.MINE: 
-                        return '';
+                        return 'X';
                     case CODE.NORMAL:
                         return '';
                     case CODE.FLAG_MINE:
@@ -65,7 +81,8 @@ export default {
                     case CODE.QUESTION:
                         return '?';
                     case CODE.CLICKED_MINE:
-                        return '펑';
+                    case CODE.REST_MINE:
+                        return '*';
                     default:
                         return this.$store.state.tableData[row][col] || '';
                 }
