@@ -62,13 +62,14 @@ export default new Vuex.Store({
         timer: 0,
         halted: true,
         result: '',
+        openedCount: 0,
      },
      getters: { 
 
      },
      mutations: {
         [START_GAME](state, {row, col, mine} ){
-            state.date = {
+            state.data = {
                 row, 
                 col, 
                 mine,
@@ -76,37 +77,125 @@ export default new Vuex.Store({
             state.tableData = plantMine(row, col, mine);
             state.timer = 0;
             state.halted = false;
+            state.openedCount =  0;
         },
         [OPEN_CELL](state, { row, col }){
-            Vue.set(state.tableData[row], col, CODE.OPENED);
-        },
-        [CLICK_MINE](state) {
+            let openedCount = 0;
 
+            const checked = [];
+            function checkAround(row, col) { // check surrounding 8 areas
+                let outOfBound = row < 0 || row >= state.tableData.length || 
+                                 col < 0 || col >= state.tableData[0].length;
+                if (outOfBound) { 
+                    return;  
+                }
+                
+                if ([CODE.OPENED, 
+                     CODE.FLAG, 
+                     CODE.MINE, 
+                     CODE.FLAG_MINE, 
+                     CODE.QUESTION_MINE, 
+                     CODE.QUESTION].includes(state.tableData[row][col])) { 
+                    return; 
+                }
+
+                if (checked.includes(row + '/' + col)) {
+                    return;
+                } else {
+                    checked.push(row + '/' + col);
+                }
+
+                let  around = [];
+
+                if(state.tableData[row - 1]) {
+                    around = around.concat([
+                        state.tableData[row - 1][col - 1], 
+                        state.tableData[row - 1][col],
+                        state.tableData[row - 1][col + 1]
+                    ]);
+                }
+
+                around = around.concat([
+                    state.tableData[row][col - 1], 
+                    state.tableData[row][col + 1],
+                ]);
+
+                if(state.tableData[row + 1]) {
+                    around = around.concat([
+                        state.tableData[row + 1][col - 1],
+                        state.tableData[row + 1][col],
+                        state.tableData[row + 1][col + 1],
+                    ]);
+                }
+
+                const counted = around.filter(function (v) {
+                    return [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v);
+                });
+                
+                if(counted.length === 0 && row >= -1) { // if no mine's found 
+                    const near = [];
+
+                    if (row-1 > -1) {
+                        near.push([row - 1, col - 1]);
+                        near.push([row - 1, col]);
+                        near.push([row - 1, col + 1]);
+                    }
+                    near.push([row, col - 1]);
+                    near.push([row, col + 1]);
+
+                    if (row + 1 < state.tableData.length) {    
+                        near.push([row + 1, col - 1]);
+                        near.push([row + 1, col]);
+                        near.push([row + 1, col + 1]);
+                    }
+
+                    near.forEach((n) => {
+                        if(state.tableData[n[0]][n[1]] !== CODE.OPENED) {
+                            checkAround(n[0], n[1]);
+                        }
+                    });
+                }
+
+                if(state.tableData[row][col] === CODE.NORMAL) {
+                    openedCount += 1;
+                }
+                Vue.set(state.tableData[row], col, counted.length); 
+            }
+
+            checkAround(row, col);
+            let halted = false;
+            let result = ''; 
+            if (state.data.row * state.data.col - state.data.mine === state.openedCount + openedCount) {
+                halted = true; 
+                result = `It took you  ${state.timer} seconds to win the game!`
+            } 
+            console.log(state.data.row, state.data.col, state.data.mine, state.openedCount, openedCount);
+            state.openedCount += openedCount;
+            state.halted = halted;
+            state.result = result;
+        },
+        [CLICK_MINE](state, { row, col }) {
+            state.halted = true;
+            Vue.set(state.tableData[row], col, CODE.CLICKED_MINE);
         },
         [FLAG_CELL](state, { row, col }){
             if (state.tableData[row][col] === CODE.MINE) {
-                console.log('mine-flag');
                 Vue.set(state.tableData[row], col, CODE.FLAG_MINE);
             } else {
-                console.log('normal-flag');
                 Vue.set(state.tableData[row], col, CODE.FLAG);
             }
         },
         [QUESTION_CELL](state, { row, col }) {
             if (state.tableData[row][col] === CODE.FLAG_MINE) {
-                console.log('mine-flag-question');
                 Vue.set(state.tableData[row], col, CODE.QUESTION_MINE);
             } else {
-                console.log('normal-flag-question');
                 Vue.set(state.tableData[row], col, CODE.QUESTION);
             }
         },
         [NORMALIZE_CELL](state, { row, col }){
             if (state.tableData[row][col] === CODE.QUESTION_MINE) {
-                console.log('mine-flag-question-mine');
                 Vue.set(state.tableData[row], col, CODE.MINE);
             } else {
-                console.log('normal-flag-question-normal');
                 Vue.set(state.tableData[row], col, CODE.NORMAL);
             }
         },

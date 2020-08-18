@@ -20,10 +20,10 @@ import { START_GAME } from './store';
         },
         methods: {
             onChangeRow(e) {
-                this.row = e.target.value;
+                this.row = Number(e.target.value);
             },
             onChangeCol(e) {
-                this.col = e.target.value;
+                this.col = Number(e.target.value);
             },
             onChangeMine(e) {
                 this.mine = e.target.value;
