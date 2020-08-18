@@ -39,7 +39,7 @@ export default {
                         }
                     case CODE.REST_MINE:
                         return {
-                            background: '#ffbbbb',
+                            color: '#f00',
                             fontWeight: 'bold',
                             fontSize: '1.5em',  
                         }
