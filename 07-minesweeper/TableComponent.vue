@@ -18,7 +18,8 @@ import { CODE,
          OPEN_CELL, 
          FLAG_CELL,
          QUESTION_CELL,
-         NORMALIZE_CELL } from './store';
+         NORMALIZE_CELL, 
+         CLICK_MINE} from './store';
 export default {
     computed: {
         ...mapState(['tableData', 'halted']),
@@ -54,7 +55,7 @@ export default {
             return (row, col) => {
                 switch(this.$store.state.tableData[row][col]) {
                     case CODE.MINE: 
-                        return 'X';
+                        return '';
                     case CODE.NORMAL:
                         return '';
                     case CODE.FLAG_MINE:
@@ -66,7 +67,7 @@ export default {
                     case CODE.CLICKED_MINE:
                         return '펑';
                     default:
-                        return '';
+                        return this.$store.state.tableData[row][col] || '';
                 }
             }
         },
@@ -76,7 +77,15 @@ export default {
             if (this.halted) {
                 return;
             }
-            this.$store.commit(OPEN_CELL, { row, col });
+
+            switch(this.tableData[row][col]) {
+                case CODE.NORMAL:
+                    return this.$store.commit(OPEN_CELL, { row, col });
+                case CODE.MINE:
+                    return this.$store.commit(CLICK_MINE, { row, col });
+                default:
+                    return ;
+            }
         },
         onRightClickTd(row, col) {
             if (this.halted) {

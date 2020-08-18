@@ -14,6 +14,8 @@ import store, { INCREMENT_TIMER } from './store';
 import TableComponent from './TableComponent';
 import MineForm from './MineForm';
 
+let interval;
+
 export default {
     store,
     components: {
@@ -27,7 +29,6 @@ export default {
     },
     watch: {
         halted(value, oldValue) {
-            let interval = null;
             if (value === false) {
                 interval = setInterval(() => {
                     this.$store.commit(INCREMENT_TIMER);
@@ -41,14 +42,13 @@ export default {
 </script>
 
 <style>
-table {
-    border-collapse: collapse;
-}
-tr ,td {
-    
-    border: 1px solid black;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-}     
+    table {
+        border-collapse: collapse;
+    }
+    tr ,td {
+        border: 1px solid black;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+    }     
 </style>
